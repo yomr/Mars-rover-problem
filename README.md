@@ -2,7 +2,7 @@
 Mars Rover Problem
 
 #How to run
-1) Run the program as
+1) Run the script as
 `ruby driver.rb`
 
 2) After all the lines of test cases are given, type exit to mark the end of test cases eg:
