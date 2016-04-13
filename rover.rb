@@ -4,13 +4,21 @@ class Rover
   attr_accessor :orientation_to_move_in
 
   def initialize(x_pos, y_pos, heading)
-    @current_position = {x: x_pos, y: y_pos, heading: heading}
-    @orientation_to_move_in = heading
+    @x = x_pos
+    @y = y_pos
+    @heading = heading
+  end
+
+  def set_environment(upper_x_limit, upper_y_limit)
+    @upper_x_limit = upper_x_limit
+    @upper_y_limit = upper_y_limit
+    @lower_x_limit = 0
+    @lower_y_limit = 0
   end
 
   def update_orientation_to_move_in(next_direction)
     if next_direction == 'L'
-      case @orientation_to_move_in
+      case @heading
         when 'N' then 'W'
         when 'W' then 'S'
         when 'S' then 'E'
@@ -18,7 +26,7 @@ class Rover
         else raise 'Invalid orientation_to_move_in'
       end
     elsif next_direction == 'R'
-      case @orientation_to_move_in
+      case @heading
         when 'N' then 'E'
         when 'E' then 'S'
         when 'S' then 'W'
@@ -29,25 +37,23 @@ class Rover
   end
  
   def change_orientation(next_direction)
-      @orientation_to_move_in = update_orientation_to_move_in(next_direction)
+      @heading = update_orientation_to_move_in(next_direction)
   end
 
   def move
-    current_x = @current_position[:x]
-    current_y = @current_position[:y]    
-    case @orientation_to_move_in
+    case @heading
       when 'N' 
-        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if current_y + 1 > $upper_y_limit.to_i
-        @current_position = {x: current_x, y: current_y + 1, heading: @orientation_to_move_in}
+        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if @y + 1 > @upper_y_limit.to_i
+        @y = @y + 1
       when 'E' 
-        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if current_x + 1 > $upper_x_limit.to_i
-        @current_position = {x: current_x + 1, y: current_y, heading: @orientation_to_move_in}
-      when 'S' 
-        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if current_y - 1 < $lower_y_limit.to_i
-        @current_position = {x: current_x, y: current_y - 1, heading: @orientation_to_move_in}
+        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if @x + 1 > @upper_x_limit.to_i
+        @x = @x + 1
+      when 'S'
+        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if @y - 1 < @lower_y_limit.to_i
+        @y = @y - 1
       when 'W' 
-        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if current_x - 1 < $lower_x_limit.to_i
-        @current_position = {x: current_x - 1, y: current_y, heading: @orientation_to_move_in}
+        raise 'Moving out of the grid. Invalid co-oridnates. Exiting' if @x - 1 < @lower_x_limit.to_i
+        @x = @x - 1
     end
   end
   
@@ -60,7 +66,6 @@ class Rover
           change_orientation(instruction)
       end
     }
-    @final_position = @current_position
-    @final_position
+    puts "#{@x} #{@y} #{@heading} \n"
   end
 end
