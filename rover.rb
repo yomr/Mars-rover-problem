@@ -1,7 +1,7 @@
 class Rover
-  attr_reader :final_position
-  attr_accessor :current_position
-  attr_accessor :orientation_to_move_in
+  attr_reader :x
+  attr_reader :y
+  attr_reader :heading
 
   def initialize(x_pos, y_pos, heading)
     @x = x_pos
@@ -16,28 +16,26 @@ class Rover
     @lower_y_limit = 0
   end
 
-  def update_orientation_to_move_in(next_direction)
-    if next_direction == 'L'
-      case @heading
-        when 'N' then 'W'
-        when 'W' then 'S'
-        when 'S' then 'E'
-        when 'E' then 'N'
-        else raise 'Invalid orientation_to_move_in'
-      end
-    elsif next_direction == 'R'
-      case @heading
-        when 'N' then 'E'
-        when 'E' then 'S'
-        when 'S' then 'W'
-        when 'W' then 'N'
-        else raise 'Invalid orientation_to_move_in'
-      end
-    end
-  end
+
  
-  def change_orientation(next_direction)
-      @heading = update_orientation_to_move_in(next_direction)
+  def change_heading(next_direction)
+    @heading = if next_direction == 'L'
+                case @heading
+                  when 'N' then 'W'
+                  when 'W' then 'S'
+                  when 'S' then 'E'
+                  when 'E' then 'N'
+                  else raise 'Invalid orientation_to_move_in'
+                end
+              elsif next_direction == 'R'
+                case @heading
+                  when 'N' then 'E'
+                  when 'E' then 'S'
+                  when 'S' then 'W'
+                  when 'W' then 'N'
+                  else raise 'Invalid orientation_to_move_in'
+                end
+              end
   end
 
   def move
@@ -63,9 +61,9 @@ class Rover
       if instruction == 'M'
         move
       else 
-          change_orientation(instruction)
+          change_heading(instruction)
       end
     }
-    puts "#{@x} #{@y} #{@heading} \n"
+    puts "#{@x} #{@y} #{@heading}"
   end
 end
