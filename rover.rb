@@ -61,7 +61,7 @@ class Rover
       if instruction == 'M'
         move
       else 
-          change_heading(instruction)
+        change_heading(instruction)
       end
     }
     puts "#{@x} #{@y} #{@heading}"
